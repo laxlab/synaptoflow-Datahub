@@ -1,0 +1,19 @@
+name: Weekly Signal Report
+on:
+  schedule:
+    - cron: "0 9 * * MON" # every Monday at 9am UTC
+  workflow_dispatch: {} # lets you also trigger it manually to test
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - run: python weekly_report.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WEEKLY_REPORT_WEBHOOK_URL: ${{ secrets.WEEKLY_REPORT_WEBHOOK_URL }}
